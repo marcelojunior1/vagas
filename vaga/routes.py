@@ -16,9 +16,11 @@ async def findAll():
 
 @router.post("/", status_code=201)
 async def create(vagaReq: ReqNovaVaga = Body(...)):
-    nova_vaga = Vaga(id=vagaReq.id, tokens=vagaReq.tokens, isApplied=vagaReq.isApplied)
+    nova_vaga = Vaga(id=vagaReq.id, tokens=vagaReq.tokens, isApplied=vagaReq.isApplied, isEnabled=vagaReq.isEnabled)
     await nova_vaga.create()
     return {
         "message": "Vaga salva com sucesso.",
         "data": nova_vaga
     }
+
+

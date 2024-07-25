@@ -12,6 +12,7 @@ class Vaga(Document):
     id: PyObjectId = Field(alias="_id", default=None)
     tokens: list[str] = []
     isApplied: bool = False
+    isEnabled: bool = False
     timestamp: datetime = datetime.now()
 
     def __init__(self, *args, **kwargs):

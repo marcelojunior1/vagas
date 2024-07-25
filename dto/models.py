@@ -6,3 +6,4 @@ class ReqNovaVaga(BaseModel):
     id: str
     tokens: list[str]
     isApplied: bool = False
+    isEnabled: bool = False
