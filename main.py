@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from db.database import init_db
-from route.vagas import router as Vagas
+from vaga.routes import router as Vagas
 
 app = FastAPI()
 

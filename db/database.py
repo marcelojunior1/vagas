@@ -1,7 +1,7 @@
 import os
 import beanie
 import motor.motor_asyncio
-from model.vaga import Vaga
+from vaga.model import Vaga
 
 uri: str = os.environ["URI"]
 

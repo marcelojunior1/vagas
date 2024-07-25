@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body
 from dto.models import ReqNovaVaga
-from model.vaga import Vaga
+from vaga.model import Vaga
 
 router = APIRouter()
 
