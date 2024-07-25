@@ -18,7 +18,7 @@ for (let i in lista) {
             tokens[i] = tokens[i].toLowerCase()
         }
 
-        fetch("http://127.0.0.1:8000/vagas", {
+        fetch("http://127.0.0.1:8000/api/vagas", {
             method: "POST",
             body: JSON.stringify({
                 id: id,
