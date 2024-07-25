@@ -14,6 +14,10 @@ for (let i in lista) {
         tokens.shift()
         tokens = titleTokens.concat(tokens)
 
+        for (i in tokens) {
+            tokens[i] = tokens[i].toLowerCase()
+        }
+
         fetch("http://127.0.0.1:8000/vagas", {
             method: "POST",
             body: JSON.stringify({

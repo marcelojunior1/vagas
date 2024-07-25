@@ -1,5 +1,3 @@
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI
 
 from db.database import init_db
@@ -16,4 +14,4 @@ async def start_db():
 async def root():
     return {"res": "Sistema Vagas"}
 
-app.include_router(Vagas, tags=["vagas"], prefix="/vagas")
+app.include_router(Vagas, tags=["vagas"], prefix="/api/vagas")
