@@ -21,7 +21,7 @@ function listenForClicks() {
 			  .then((json) => {
 				  let cont = 0;
 				  for (let i in json.data) {
-					  if (cont === 20) {
+					  if (cont === 5) {
 						  return;
 					  }
 
