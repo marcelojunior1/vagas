@@ -13,6 +13,8 @@ class Vaga(Document):
     tokens: list[str] = []
     isApplied: bool = False
     isEnabled: bool = False
+    isUpdated: bool = False
+    txtVaga: str = ""
     timestamp: datetime = datetime.now()
 
     def __init__(self, *args, **kwargs):

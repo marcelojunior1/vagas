@@ -1,18 +1,28 @@
 from fastapi import APIRouter, Body, HTTPException
-
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
+from beanie.operators import In
 
 router = APIRouter()
 
 
 @router.get("/", status_code=200)
-async def findAll():
-    lista = await Vaga.find_all().to_list()
+async def findAll(enable: bool | None = None, updated: bool | None = None):
+    if enable is not None:
+        lista = await Vaga.find(In(Vaga.isEnabled, [enable])).to_list()
+    elif updated is not None:
+        lista = await Vaga.find(
+            In(Vaga.isUpdated, [False]),
+            In(Vaga.isEnabled, [True])
+        ).to_list()
+    else:
+        lista = await Vaga.find_all().to_list()
+
     return {
         "message": "Lista de vagas",
         "data": lista
     }
+
 
 @router.get("/{id}", status_code=200)
 async def findById(id: str):
@@ -30,6 +40,7 @@ async def create(vagaReq: ReqNovaVaga = Body(...)):
         tokens=vagaReq.tokens,
         isApplied=vagaReq.isApplied,
         isEnabled=vagaReq.isEnabled,
+        isUpdated=vagaReq.isUpdated,
         txtVaga=vagaReq.txtVaga
     )
     await nova_vaga.create()
@@ -38,9 +49,9 @@ async def create(vagaReq: ReqNovaVaga = Body(...)):
         "data": nova_vaga
     }
 
+
 @router.put("/{id}", status_code=201)
 async def update(id: str, reqUpdateVaga: ReqUpdateVaga = Body(...)):
-
     vaga = await Vaga.find_one({"_id": id})
 
     if not vaga:
@@ -56,5 +67,3 @@ async def update(id: str, reqUpdateVaga: ReqUpdateVaga = Body(...)):
         "message": "Vaga atualizada com sucesso.",
         "data": vaga
     }
-
-

@@ -18,8 +18,5 @@ app.add_middleware(
 async def start_db():
     await init_db()
 
-@app.get("/")
-async def root():
-    return {"res": "Sistema Vagas"}
 
 app.include_router(Vagas, tags=["vagas"], prefix="/api/vagas")
