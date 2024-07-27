@@ -12,7 +12,8 @@
   "permissions": [
     "*://127.0.0.1/*",
     "activeTab",
-    "webRequest"
+    "webRequest",
+    "<all_urls>"
     ],
 
   "browser_action": {
@@ -24,6 +25,10 @@
     }],
     "default_title": "Vagas",
     "default_popup": "popup/index.html"
+  },
+
+  "background": {
+    "scripts": ["background.js"]
   },
 
   "web_accessible_resources": [

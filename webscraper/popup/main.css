@@ -7,24 +7,21 @@ html, body {
 }
 
 button {
-  border: none;
+  border: 1px solid black;
   width: 100%;
   margin: 3% auto;
   padding: 4px;
   text-align: center;
   font-size: 1.0em;
   cursor: pointer;
-  background-color: #E5F2F2;
+  background-color: whitesmoke;
 }
 
 button:hover {
-  background-color: #CFF2F2;
+  background-color: cornflowerblue;
 }
 
-button[type="reset"] {
-  background-color: #FBFBC9;
-}
 
 button[type="reset"]:hover {
-  background-color: #EAEA9D;
+  background-color: cornflowerblue;
 }
