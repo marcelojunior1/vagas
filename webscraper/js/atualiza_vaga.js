@@ -45,8 +45,10 @@ var vaga = fetch("http://127.0.0.1:8000/api/vagas/" + id)
         vaga.isEnabled = true
 
         return waitForElement(".artdeco-inline-feedback__message", 3000).then(function(){
-            vaga.tokens.push("vaga_site_externo")
-            vaga.txtVaga = vaga.txtVaga + '\n' + "vaga_site_externo";
+            if (document.getElementsByClassName("jobs-description__container jobs-description__container--condensed")[0].innerHTML.includes("Esta vaga foi obtida de um site de empregos")) {
+                vaga.tokens.push("vaga_site_externo")
+                vaga.txtVaga = vaga.txtVaga + '\n' + "vaga_site_externo"
+            }
             return vaga
         }).catch(()=>{
             return vaga
@@ -64,5 +66,5 @@ vaga.then(v => {
                   headers: {
                       "Content-type": "application/json; charset=UTF-8"
                   }
-              }).then(r => console.log("FIM"));
+              }).then(r => window.close());
 })
