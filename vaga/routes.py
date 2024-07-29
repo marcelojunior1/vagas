@@ -1,22 +1,51 @@
-from fastapi import APIRouter, Body, HTTPException
+import numpy as np
+from beanie.operators import In
+from fastapi import APIRouter, Body, HTTPException, Request
+from keras.src.utils import pad_sequences
+
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
-from beanie.operators import In
 
 router = APIRouter()
 
 
 @router.get("/", status_code=200)
-async def findAll(enable: bool | None = None, updated: bool | None = None):
-    if enable is not None:
-        lista = await Vaga.find(In(Vaga.isEnabled, [enable])).to_list()
-    elif updated is not None:
+async def findAll(req: Request, infer: bool | None = None, enable: bool | None = None, updated: bool | None = None,
+                  max_sequence=None):
+    if updated is not None:
         lista = await Vaga.find(
-            In(Vaga.isUpdated, [False]),
+            In(Vaga.isUpdated, [updated]),
             In(Vaga.isEnabled, [True])
         ).to_list()
+        print(len(lista))
+    elif enable is not None:
+        lista = await Vaga.find(In(Vaga.isEnabled, [enable])).to_list()
     else:
         lista = await Vaga.find_all().to_list()
+
+    lista_final = []
+
+    if infer is not None and infer is True:
+        print("infer")
+        char2idx = req.state.ml_model['char2idx']
+        UNKNOWN_IDX = (len(char2idx) - 1)
+        model = req.state.ml_model['model']
+
+
+        for i in lista:
+            novoX = list(map(lambda word: [char2idx.get(char) or UNKNOWN_IDX for char in word], [i.txtVaga.replace("\n", " ").lower()]))
+            novoX = pad_sequences(novoX, maxlen=max_sequence, padding='post', truncating='post')
+            #y_pred = model.predict(novoX)
+            #print(y_pred)
+            #y_pred = round(float(y_pred[0][1]), 3)
+            y_pred = 2
+            lista_final.append({
+                "pred": y_pred,
+                "vaga": i
+            })
+
+        #lista_final.sort(key=lambda x: x['pred'], reverse=True)
+        lista = lista_final
 
     return {
         "message": "Lista de vagas",

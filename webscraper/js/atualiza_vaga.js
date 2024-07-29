@@ -61,7 +61,8 @@ vaga.then(v => {
                   body: JSON.stringify({
                       tokens: v.tokens,
                       txtVaga: v.txtVaga,
-                      isEnabled: true
+                      isEnabled: true,
+                      isUpdated: false
                   }),
                   headers: {
                       "Content-type": "application/json; charset=UTF-8"

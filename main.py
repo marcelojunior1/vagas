@@ -1,9 +1,28 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from db.database import init_db
+from ml.ml import get_char2idx, get_model
 from vaga.routes import router as Vagas
 
-app = FastAPI()
+
+ml_model = {}
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()
+
+    ml_model["char2idx"] = get_char2idx()
+    ml_model["model"] = get_model()
+
+    yield {'ml_model': ml_model}
+
+    ml_model.clear()
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -12,11 +31,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-async def start_db():
-    await init_db()
 
 
 app.include_router(Vagas, tags=["vagas"], prefix="/api/vagas")
