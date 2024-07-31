@@ -4,7 +4,7 @@
     <li class="mb-4" v-for="vaga in vagas" :key="vaga._id">
       <div class="row container justify-content-center">
 
-        <div class="col-1">
+        <div class="col-1 text-white">
           <p> {{ vaga.pred }}</p>
         </div>
 
