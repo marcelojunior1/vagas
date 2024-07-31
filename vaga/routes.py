@@ -22,9 +22,8 @@ async def findAll(req: Request, treinamento: bool = False, infer: bool | None = 
 
         vagas_neg = await Vaga.find_many(
             In(Vaga.isApplied, [False]),
-            In(Vaga.isEnabled, [True]),
-            limit=size_train_pos
-        ).to_list()
+            In(Vaga.isEnabled, [True])
+        ).aggregate([{"$sample": {"size": size_train_pos} }]).to_list()
 
         size_split = int(size_train_pos * 0.2)
 
@@ -57,7 +56,7 @@ async def findAll(req: Request, treinamento: bool = False, infer: bool | None = 
             novoX = pad_sequences(novoX, maxlen=max_sequence, padding='post', truncating='post')
             novoX = sequence.pad_sequences(novoX, maxlen=200)
             y_pred = model.predict(novoX)[0][0]
-            y_pred = round(float(y_pred), 3)
+            y_pred = round(float(y_pred), 5)
             lista_final.append({
                 "pred": y_pred,
                 "vaga": i
