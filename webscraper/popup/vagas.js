@@ -1,9 +1,4 @@
 
-const hidePage =  "body { border: 2px solid red; }";
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 function listenForClicks() {
   document.addEventListener("click", (e) => {
@@ -11,10 +6,10 @@ function listenForClicks() {
 	function beastify(tabs) {
 
 	  if (e.target.textContent === "Vagas") {
-		  browser.tabs.sendMessage(tabs[0].id, {
-			command: "get_vagas",
-			beastURL: { "data": "OK" }
-		  });
+				  browser.tabs.sendMessage(tabs[0].id, {
+					  command: "get_vagas",
+					  beastURL: { "data":  tabs[0].url }
+				  });
       } else {
 		  fetch("http://127.0.0.1:8000/api/vagas?enable=false")
 			  .then((response) => response.json())
