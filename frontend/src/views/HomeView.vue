@@ -57,7 +57,7 @@ export default {
     atualizar(id) {
       let vaga = this.vagas.filter(v => v.vaga._id === id)[0]
       axios.put("http://localhost:8000/api/vagas/" + vaga.vaga._id, {
-        isApplied: vaga.isApplied,
+        isApplied: vaga.vaga.isApplied,
         isUpdated: true
       })
       .then(response => {
