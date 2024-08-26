@@ -2,6 +2,7 @@ from beanie.operators import In
 from fastapi import APIRouter, Body, HTTPException, Request
 from keras.preprocessing import sequence
 from keras.src.utils import pad_sequences
+from keras.preprocessing.text import text_to_word_sequence
 
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
@@ -14,23 +15,11 @@ async def findAll(req: Request, treinamento: bool = False, infer: bool | None = 
                   max_sequence=None):
 
     if treinamento is True:
-        vagas_pos = await Vaga.find(
-            In(Vaga.isApplied, [True])
-        ).to_list()
-
-        size_train_pos = len(vagas_pos)
-
-        vagas_neg = await Vaga.find_many(
-            In(Vaga.isApplied, [False]),
-            In(Vaga.isEnabled, [True])
-        ).aggregate([{"$sample": {"size": size_train_pos} }]).to_list()
-
-        size_split = int(size_train_pos * 0.2)
+        lista = await Vaga.find(In(Vaga.isUpdated, [True])).to_list()
 
         return {
             "message": "Lista de treinamento",
-            "train": vagas_pos[size_split+1:] + vagas_neg[size_split+1:],
-            "test": vagas_pos[:size_split] + vagas_neg[:size_split],
+            "data": lista
         }
 
     if updated is not None:
@@ -51,10 +40,10 @@ async def findAll(req: Request, treinamento: bool = False, infer: bool | None = 
         model = req.state.ml_model['model']
 
         for i in lista:
-            titulo_vaga = i.txtVaga.replace("\n", " ").lower()
-            novoX = list(map(lambda word: [char2idx.get(char) or UNKNOWN_IDX for char in word], [titulo_vaga]))
+            tokens_vaga = text_to_word_sequence(i.txtVaga)
+            novoX = list(map(lambda word: [char2idx.get(char) or UNKNOWN_IDX for char in word], [tokens_vaga]))
             novoX = pad_sequences(novoX, maxlen=max_sequence, padding='post', truncating='post')
-            novoX = sequence.pad_sequences(novoX, maxlen=200)
+            novoX = sequence.pad_sequences(novoX, maxlen=40)
             y_pred = model.predict(novoX)[0][0]
             y_pred = round(float(y_pred), 5)
             lista_final.append({
@@ -113,26 +102,4 @@ async def update(id: str, reqUpdateVaga: ReqUpdateVaga = Body(...)):
     return {
         "message": "Vaga atualizada com sucesso.",
         "data": vaga
-    }
-
-
-@router.get("/treinamento", status_code=200)
-async def treinamento():
-    vagas_aplicadas = await Vaga.find(
-        In(Vaga.isApplied, [True])
-    ).to_list()
-
-    tamanho_lista_vagas_aplicadas = len(vagas_aplicadas)
-
-    vagas_nao_aplicadas = await Vaga.find_many(
-        In(Vaga.isApplied, [False]),
-        In(Vaga.isEnabled, [True]),
-        limit=tamanho_lista_vagas_aplicadas
-    ).to_list()
-
-    lista = vagas_nao_aplicadas + vagas_aplicadas
-
-    return {
-        "message": "Vagas de treinamento",
-        "data": lista
     }

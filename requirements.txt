@@ -7,5 +7,5 @@ numpy~=1.26.4
 typing_extensions~=4.12.2
 matplotlib~=3.9.1
 pandas~=2.2.2
-
+spacy
 starlette~=0.37.2
