@@ -1,5 +1,8 @@
 <template>
   <div class="container-fluid">
+    <div class="mb-4">
+      <button @click="atualizaTudo()" type="button" class="btn btn-danger"> Atualizar tudo </button>
+    </div>
     <ul id="lista" class="container-fluid" style="max-width: 800px; list-style-type: none">
     <li class="mb-4" v-for="vaga in vagas" :key="vaga._id">
       <div class="row container justify-content-center">
@@ -54,6 +57,13 @@ export default {
     })
   },
   methods: {
+    atualizaTudo() {
+      for (let i in this.vagas) {
+        let vaga = this.vagas[i].vaga;
+        this.atualizar(vaga._id)
+      }
+    },
+
     atualizar(id) {
       let vaga = this.vagas.filter(v => v.vaga._id === id)[0]
       axios.put("http://localhost:8000/api/vagas/" + vaga.vaga._id, {
