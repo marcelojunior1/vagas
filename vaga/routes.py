@@ -6,6 +6,7 @@ from keras.preprocessing.text import text_to_word_sequence
 
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
+import random
 
 router = APIRouter()
 
@@ -15,11 +16,14 @@ async def findAll(req: Request, treinamento: bool = False, infer: bool | None = 
                   max_sequence=None):
 
     if treinamento is True:
-        lista = await Vaga.find(In(Vaga.isUpdated, [True])).to_list()
+        lista_vagas = await Vaga.find(In(Vaga.isUpdated, [True])).to_list()
+
+        lista_pos = list(filter(lambda x: x.isApplied == True, lista_vagas))
+        lista_neg = random.sample(list(filter(lambda x: x.isApplied == False, lista_vagas)), len(lista_pos))
 
         return {
             "message": "Lista de treinamento",
-            "data": lista
+            "data": lista_pos + lista_neg
         }
 
     if updated is not None:
