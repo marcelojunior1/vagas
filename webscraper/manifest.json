@@ -27,9 +27,12 @@
     "default_popup": "popup/index.html"
   },
 
-  "background": {
-    "scripts": ["background.js"]
-  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.linkedin.com/*"],
+      "js": ["background.js"]
+    }
+  ],
 
   "web_accessible_resources": [
     "img/*.jpg"
