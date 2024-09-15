@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="mb-4 d-grid gap-2 d-flex justify-content-center">
       <button @click="atualizaTudo()" type="button" class="btn btn-sm btn-warning"> Atualizar tudo </button>
-      <button type="button" class="me-2 btn btn-sm btn-danger"> Deletar tudo </button>
+      <button @click="deletaTudo()" type="button" class="me-2 btn btn-sm btn-danger"> Deletar tudo </button>
     </div>
 
     <div class="row spinner-border text-primary" role="status" v-show="!lista_pronta"></div>
@@ -12,7 +12,10 @@
       <div class="d-grid gap-2 col-12 col-sm-10 mx-auto" style="max-width: 720px;">
 
         <div class="row mb-4" v-for="vaga in vagas" :key="vaga._id">
-            <div class="col-2 text-white align-content-start"> <p> {{ vaga.pred }}</p> </div>
+            <div class="col-2 text-white align-content-start">
+              <p> {{ vaga.pred }}</p>
+              <button @click="deleta(vaga.vaga._id)" type="button" class="btn btn-danger"> Deletar </button>
+            </div>
 
             <div class="col-7 text-end">
               <a v-bind:href="'https://www.linkedin.com/jobs/view/' + vaga.vaga._id"
@@ -26,9 +29,10 @@
               </div>
             </div>
 
-            <div class="col-2 align-content-start">
-              <button @click="atualizar(vaga.vaga._id)" type="button" class="btn btn-primary"> Atualizar </button>
-            </div>
+          <div class="col-2 align-content-start">
+            <button @click="atualizar(vaga.vaga._id)" type="button" class="btn btn-primary"> Atualizar </button>
+          </div>
+
           </div>
       </div>
     </div>
@@ -64,6 +68,24 @@ export default {
     })
   },
   methods: {
+    deletaTudo() {
+      for (let i in this.vagas) {
+        let vaga = this.vagas[i].vaga;
+        this.deleta(vaga._id)
+      }
+    },
+    deleta(id) {
+      let vaga = this.vagas.filter(v => v.vaga._id === id)[0]
+      axios.delete("http://localhost:8000/api/vagas/" + vaga.vaga._id)
+      .then(response => {
+        console.log("Vaga deletada")
+        console.log(response)
+        this.vagas = this.vagas.filter(v => v.vaga._id !== id)
+    }).catch(err => {
+      console.log(err);
+    })
+    },
+
     atualizaTudo() {
       for (let i in this.vagas) {
         let vaga = this.vagas[i].vaga;

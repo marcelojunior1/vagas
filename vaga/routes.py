@@ -113,3 +113,16 @@ async def update(id: str, reqUpdateVaga: ReqUpdateVaga = Body(...)):
         "message": "Vaga atualizada com sucesso.",
         "data": vaga
     }
+
+@router.delete("/{id}", status_code=204)
+async def delete(id: str):
+    vaga = await Vaga.find_one({"_id": id})
+    if not vaga:
+        raise HTTPException(status_code=404)
+
+    await Vaga.find({"_id": id}).delete()
+
+    return {
+        "message": "Vaga deletada com sucesso.",
+        "data": vaga
+    }
