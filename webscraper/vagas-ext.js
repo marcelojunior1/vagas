@@ -1,3 +1,4 @@
+console.log("vagas_ext")
 function tokenize(sentence) {
     const cleanedSentence = sentence.replace(/[.,()-]/g, '').toLowerCase();
     const words = cleanedSentence.split(' ');
