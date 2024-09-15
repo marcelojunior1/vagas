@@ -1,1 +1,0 @@
-console.log("atualiza_vaga");
