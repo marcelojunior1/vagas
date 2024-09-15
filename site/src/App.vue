@@ -1,7 +1,7 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">Sobre</router-link>
+    <router-link class="text-decoration-none" to="/">Home</router-link> |
+    <router-link class="text-decoration-none" to="/about">Sobre</router-link>
   </nav>
   <router-view/>
 </template>
@@ -12,7 +12,6 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 
 nav {
@@ -25,7 +24,7 @@ nav a {
 }
 
 body {
-  background-color: #031c30;
+  background-color:  #052637;
 }
 
 nav a.router-link-exact-active {

@@ -1,36 +1,41 @@
 <template>
   <div class="container-fluid">
-    <div class="mb-4">
-      <button @click="atualizaTudo()" type="button" class="btn btn-danger"> Atualizar tudo </button>
+    <div class="mb-4 d-grid gap-2 d-flex justify-content-center">
+      <button @click="atualizaTudo()" type="button" class="btn btn-sm btn-warning"> Atualizar tudo </button>
+      <button type="button" class="me-2 btn btn-sm btn-danger"> Deletar tudo </button>
     </div>
+
+    <div class="row spinner-border text-primary" role="status" v-show="!lista_pronta"></div>
+
+
+    <div class="container-fluid">
+      <div class="d-grid gap-2 col-12 col-sm-10 mx-auto" style="max-width: 720px;">
+
+        <div class="row mb-4" v-for="vaga in vagas" :key="vaga._id">
+            <div class="col-2 text-white align-content-start"> <p> {{ vaga.pred }}</p> </div>
+
+            <div class="col-7 text-end">
+              <a v-bind:href="'https://www.linkedin.com/jobs/view/' + vaga.vaga._id"
+                 target="_blank"
+                  style="text-decoration: none;"> {{vaga.vaga.txtVaga }}</a>
+            </div>
+
+            <div class="col-1 align-content-start">
+              <div class="form-check form-switch align-content-center">
+                <input v-model="vaga.vaga.isApplied" class="form-check-input" type="checkbox" >
+              </div>
+            </div>
+
+            <div class="col-2 align-content-start">
+              <button @click="atualizar(vaga.vaga._id)" type="button" class="btn btn-primary"> Atualizar </button>
+            </div>
+          </div>
+      </div>
+    </div>
+
     <ul id="lista" class="container-fluid" style="max-width: 800px; list-style-type: none">
-    <li class="mb-4" v-for="vaga in vagas" :key="vaga._id">
-      <div class="row container justify-content-center">
 
-        <div class="col-1 text-white">
-          <p> {{ vaga.pred }}</p>
-        </div>
-
-        <div class="col-7">
-          <a v-bind:href="'https://www.linkedin.com/jobs/view/' + vaga.vaga._id"
-             target="_blank"
-              style="text-decoration: none;"> {{vaga.vaga.txtVaga }}</a>
-        </div>
-
-        <div class="col-1">
-          <div class="form-check form-switch">
-            <input v-model="vaga.vaga.isApplied" class="form-check-input" type="checkbox" >
-          </div>
-        </div>
-
-        <div class="col-3">
-          <div>
-            <button @click="atualizar(vaga.vaga._id)" type="button" class="btn btn-primary"> Atualizar </button>
-          </div>
-      </div>
-      </div>
-      </li>
-  </ul>
+    </ul>
   </div>
 </template>
 
@@ -44,13 +49,15 @@ export default {
   },
   data() {
     return {
-      vagas: []
+      vagas: [],
+      lista_pronta: false
     }
   },
   created() {
     axios.get("http://localhost:8000/api/vagas?infer=True&updated=False")
     .then(response => {
       this.vagas = response.data.data;
+      this.lista_pronta = true;
     }).catch(err => {
       console.log("Erro: ")
       console.log(err);
