@@ -46,7 +46,7 @@ async def findAll(
         model = req.state.ml_model['model']
 
         for i in lista:
-            tokens_vaga = word_tokenize(i.txtVaga)
+            tokens_vaga = list(map(lambda x: str(x).lower(), word_tokenize(i.txtVaga)))
             novoX = list(map(lambda word: [char2idx.get(char) or UNKNOWN_IDX for char in word], [tokens_vaga]))
             novoX = pad_sequences(novoX, maxlen=len(char2idx), padding='post', truncating='post')
             y_pred = model.predict(novoX)[0][0]
