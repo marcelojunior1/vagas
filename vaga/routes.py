@@ -1,29 +1,36 @@
+
 from beanie.operators import In
 from fastapi import APIRouter, Body, HTTPException, Request
-from keras.preprocessing import sequence
 from keras.src.utils import pad_sequences
-from keras.preprocessing.text import text_to_word_sequence
-
+from nltk.tokenize import word_tokenize
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
-import random
 
 router = APIRouter()
 
 
 @router.get("/", status_code=200)
-async def findAll(req: Request, treinamento: bool = False, infer: bool | None = None, enable: bool | None = None, updated: bool | None = None,
-                  max_sequence=None):
-
+async def findAll(
+        req: Request,
+        treinamento: bool = False,
+        infer: bool | None = None,
+        enable: bool | None = None,
+        updated: bool | None = None,
+        max_sequence=None ):
     if treinamento is True:
         lista_vagas = await Vaga.find(In(Vaga.isUpdated, [True])).to_list()
 
         lista_pos = list(filter(lambda x: x.isApplied == True, lista_vagas))
-        lista_neg = random.sample(list(filter(lambda x: x.isApplied == False, lista_vagas)), len(lista_pos))
+        lista_neg = list(filter(lambda x: x.isApplied == False, lista_vagas))
+        lista_final = lista_neg.copy()
+        diff = int(len(lista_neg) / len(lista_pos))
+
+        for i in range(diff):
+            lista_final = lista_final + lista_pos.copy()
 
         return {
             "message": "Lista de treinamento",
-            "data": lista_pos + lista_neg
+            "data": lista_final
         }
 
     if updated is not None:
@@ -44,10 +51,9 @@ async def findAll(req: Request, treinamento: bool = False, infer: bool | None = 
         model = req.state.ml_model['model']
 
         for i in lista:
-            tokens_vaga = text_to_word_sequence(i.txtVaga)
+            tokens_vaga = word_tokenize(i.txtVaga)
             novoX = list(map(lambda word: [char2idx.get(char) or UNKNOWN_IDX for char in word], [tokens_vaga]))
-            novoX = pad_sequences(novoX, maxlen=max_sequence, padding='post', truncating='post')
-            novoX = sequence.pad_sequences(novoX, maxlen=40)
+            novoX = pad_sequences(novoX, maxlen=len(char2idx), padding='post', truncating='post')
             y_pred = model.predict(novoX)[0][0]
             y_pred = round(float(y_pred), 5)
             lista_final.append({
@@ -83,7 +89,12 @@ async def create(vagaReq: ReqNovaVaga = Body(...)):
         isUpdated=vagaReq.isUpdated,
         txtVaga=vagaReq.txtVaga
     )
-    await nova_vaga.create()
+    try:
+        await nova_vaga.create()
+    except:
+        print("Erro ao criar nova vaga", nova_vaga)
+        raise HTTPException(status_code=500, detail="Erro ao inserir nova vaga: " + nova_vaga.id)
+
     return {
         "message": "Vaga salva com sucesso.",
         "data": nova_vaga
