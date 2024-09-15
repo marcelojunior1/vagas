@@ -19,18 +19,13 @@ async def findAll(
         max_sequence=None ):
     if treinamento is True:
         lista_vagas = await Vaga.find(In(Vaga.isUpdated, [True])).to_list()
-
-        lista_pos = list(filter(lambda x: x.isApplied == True, lista_vagas))
-        lista_neg = list(filter(lambda x: x.isApplied == False, lista_vagas))
-        lista_final = lista_neg.copy()
-        diff = int(len(lista_neg) / len(lista_pos))
-
-        for i in range(diff):
-            lista_final = lista_final + lista_pos.copy()
-
+        qtd_pos = await Vaga.find(In(Vaga.isApplied, [True])).count()
+        qtd_neg = await Vaga.find(In(Vaga.isApplied, [False])).count()
         return {
             "message": "Lista de treinamento",
-            "data": lista_final
+            "data": lista_vagas,
+            "qtd_pos": qtd_pos,
+            "qtd_neg": qtd_neg,
         }
 
     if updated is not None:
