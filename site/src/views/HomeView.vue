@@ -13,8 +13,8 @@
 
         <div class="row mb-4" v-for="vaga in vagas" :key="vaga._id">
             <div class="col-2 text-white align-content-start">
+              <button @click="deleta(vaga.vaga._id)" type="button" class="btn btn-danger mb-2"> Deletar </button>
               <p> {{ vaga.pred }}</p>
-              <button @click="deleta(vaga.vaga._id)" type="button" class="btn btn-danger"> Deletar </button>
             </div>
 
             <div class="col-7 text-end">

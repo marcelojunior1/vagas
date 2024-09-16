@@ -78,7 +78,6 @@ async def findById(id: str):
 async def create(vagaReq: ReqNovaVaga = Body(...)):
     nova_vaga = Vaga(
         id=vagaReq.id,
-        tokens=vagaReq.tokens,
         isApplied=vagaReq.isApplied,
         isEnabled=vagaReq.isEnabled,
         isUpdated=vagaReq.isUpdated,

@@ -14,7 +14,6 @@ document.onkeydown = function(evt) {
       let lista = document.getElementsByClassName("scaffold-layout__list-container")[0].children
       for (idx in lista) {
           let id = lista[idx].dataset.occludableJobId
-          let tokens = []
           let textoVaga = ""
 
           let texto = lista[idx].innerText.split('\n')
@@ -27,19 +26,11 @@ document.onkeydown = function(evt) {
                   texto[j] = tokenize(texto[j])
               }
           }
-          for (let idx in texto) {
-              tokens = tokens.concat(texto[idx])
-          }
-
-          tokens = tokens.filter(e => e !== "")
-
-          console.log(id, tokens, textoVaga)
 
            fetch("http://127.0.0.1:8000/api/vagas", {
                   method: "POST",
                   body: JSON.stringify({
                       id: id,
-                      tokens: tokens,
                       txtVaga: textoVaga,
                       isEnabled: true
                   }),
