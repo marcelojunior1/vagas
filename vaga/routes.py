@@ -81,7 +81,8 @@ async def create(vagaReq: ReqNovaVaga = Body(...)):
         isApplied=vagaReq.isApplied,
         isEnabled=vagaReq.isEnabled,
         isUpdated=vagaReq.isUpdated,
-        txtVaga=vagaReq.txtVaga
+        txtVaga=vagaReq.txtVaga,
+        empresa=vagaReq.empresa
     )
     try:
         await nova_vaga.create()
