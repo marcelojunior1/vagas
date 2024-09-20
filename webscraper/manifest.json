@@ -1,5 +1,4 @@
 {
-
   "description": "Extensões para o Firefox do Sistema Vagas",
   "manifest_version": 2,
   "name": "Vagas",
@@ -16,17 +15,6 @@
     "<all_urls>"
     ],
 
-  "browser_action": {
-    "default_icon": "icons/vagas-ext.png",
-    "theme_icons": [{
-        "light": "icons/vagas-ext.png",
-        "dark": "icons/vagas-ext.png",
-        "size": 32
-    }],
-    "default_title": "Vagas",
-    "default_popup": "popup/index.html"
-  },
-
   "content_scripts": [
     {
       "matches": ["*://*.linkedin.com/*"],
@@ -37,5 +25,4 @@
   "web_accessible_resources": [
     "img/*.jpg"
   ]
-
 }

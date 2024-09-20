@@ -14,7 +14,6 @@ class Vaga(Document):
     isEnabled: bool = False
     isUpdated: bool = False
     txtVaga: str = ""
-    empresa: str = ""
     timestamp: datetime = datetime.now()
 
     def __init__(self, *args, **kwargs):

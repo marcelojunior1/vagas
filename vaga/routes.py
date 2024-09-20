@@ -2,15 +2,16 @@
 from beanie.operators import In
 from fastapi import APIRouter, Body, HTTPException, Request
 from keras.src.utils import pad_sequences
-from nltk import wordpunct_tokenize
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import RegexpTokenizer
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
+
+tokenizer = RegexpTokenizer(r'\w+')
 
 router = APIRouter()
 
 def converteTextoParaTokens(texto : str):
-    tokens = list(map(lambda x: str(x).lower(), wordpunct_tokenize(texto)))
+    tokens = list(map(lambda x: str(x).lower(), tokenizer.tokenize(texto)))
     for i in range(len(tokens)):
         if tokens[i].isdigit():
             tokens[i] = "num"
@@ -88,8 +89,7 @@ async def create(vagaReq: ReqNovaVaga = Body(...)):
         isApplied=vagaReq.isApplied,
         isEnabled=vagaReq.isEnabled,
         isUpdated=vagaReq.isUpdated,
-        txtVaga=vagaReq.txtVaga,
-        empresa=vagaReq.empresa
+        txtVaga=vagaReq.txtVaga
     )
     try:
         await nova_vaga.create()

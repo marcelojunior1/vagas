@@ -21,7 +21,7 @@
             <div class="col-7 text-end">
               <a v-bind:href="'https://www.linkedin.com/jobs/view/' + vaga.vaga._id"
                  target="_blank"
-                  style="text-decoration: none;">{{vaga.vaga.txtVaga }} {{vaga.vaga.empresa}}</a>
+                  style="text-decoration: none;">{{vaga.vaga.txtVaga }}</a>
             </div>
 
             <div class="col-1 align-content-start">

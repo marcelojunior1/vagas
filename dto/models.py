@@ -7,11 +7,9 @@ class ReqNovaVaga(BaseModel):
     isEnabled: bool = False
     isUpdated: bool = False
     txtVaga: str
-    empresa: str
 
 class ReqUpdateVaga(BaseModel):
     isApplied: bool = None
     isEnabled: bool = None
     isUpdated: bool = None
     txtVaga: str = None
-    empresa: str = None
