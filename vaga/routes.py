@@ -2,12 +2,19 @@
 from beanie.operators import In
 from fastapi import APIRouter, Body, HTTPException, Request
 from keras.src.utils import pad_sequences
+from nltk import wordpunct_tokenize
 from nltk.tokenize import word_tokenize
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
 
 router = APIRouter()
 
+def converteTextoParaTokens(texto : str):
+    tokens = list(map(lambda x: str(x).lower(), wordpunct_tokenize(texto)))
+    for i in range(len(tokens)):
+        if tokens[i].isdigit():
+            tokens[i] = "num"
+    return tokens
 
 @router.get("/", status_code=200)
 async def findAll(
@@ -46,7 +53,7 @@ async def findAll(
         model = req.state.ml_model['model']
 
         for i in lista:
-            tokens_vaga = list(map(lambda x: str(x).lower(), word_tokenize(i.txtVaga)))
+            tokens_vaga = converteTextoParaTokens(i.txtVaga)
             novoX = list(map(lambda word: [char2idx.get(char) or UNKNOWN_IDX for char in word], [tokens_vaga]))
             novoX = pad_sequences(novoX, maxlen=len(char2idx), padding='post', truncating='post')
             y_pred = model.predict(novoX)[0][0]
