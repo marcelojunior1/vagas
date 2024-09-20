@@ -1,4 +1,5 @@
 <template>
+
   <div class="container-fluid">
     <div class="mb-4 d-grid gap-2 d-flex justify-content-center">
       <button @click="atualizaTudo()" type="button" class="btn btn-sm btn-warning"> Atualizar tudo </button>
@@ -20,7 +21,7 @@
             <div class="col-7 text-end">
               <a v-bind:href="'https://www.linkedin.com/jobs/view/' + vaga.vaga._id"
                  target="_blank"
-                  style="text-decoration: none;"> {{vaga.vaga.txtVaga }}</a>
+                  style="text-decoration: none;">{{vaga.vaga.txtVaga }} {{vaga.vaga.empresa}}</a>
             </div>
 
             <div class="col-1 align-content-start">
