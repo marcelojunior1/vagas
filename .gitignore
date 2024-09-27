@@ -159,3 +159,5 @@ cython_debug/
 .idea/
 
 /ml/model.keras
+
+/ml/*.pickle
