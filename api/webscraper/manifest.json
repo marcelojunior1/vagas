@@ -2,7 +2,7 @@
   "description": "Extensões para o Firefox do Sistema Vagas",
   "manifest_version": 2,
   "name": "Vagas",
-  "version": "1.0",
+  "version": "1.0.2",
   "homepage_url": "https://github.com/marcelojunior1/vagas",
   "icons": {
     "48": "icons/vagas-ext.png"
