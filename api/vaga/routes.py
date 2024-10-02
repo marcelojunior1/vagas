@@ -52,18 +52,11 @@ async def findAll(
         char2idx = req.state.ml_model['char2idx']
         UNKNOWN_IDX = (len(char2idx) - 1)
         model = req.state.ml_model['model']
-
-        for i in lista:
-            tokens_vaga = converteTextoParaTokens(i.txtVaga)
-            novoX = list(map(lambda word: [char2idx.get(char) or UNKNOWN_IDX for char in word], [tokens_vaga]))
-            novoX = pad_sequences(novoX, maxlen=len(char2idx), padding='post', truncating='post')
-            y_pred = model.predict(novoX)[0][0]
-            y_pred = round(float(y_pred), 5)
-            lista_final.append({
-                "pred": y_pred,
-                "vaga": i
-            })
-
+        vagas_tokens = map(lambda x: converteTextoParaTokens(x.txtVaga), lista)
+        novoX = list(map(lambda word: [char2idx.get(char) or UNKNOWN_IDX for char in word], vagas_tokens))
+        novoX = pad_sequences(novoX, maxlen=80, padding='post', truncating='post')
+        y_pred = model.predict(novoX)
+        lista_final = list(map(lambda x, y: {"pred": round(float(y[0]), 5), "vaga": x}, lista, y_pred))
         lista_final.sort(key=lambda x: x['pred'], reverse=True)
         lista = lista_final
 
@@ -106,7 +99,6 @@ async def create(vagaReq: ReqNovaVaga = Body(...)):
 @router.put("/{id}", status_code=201)
 async def update(id: str, reqUpdateVaga: ReqUpdateVaga = Body(...)):
     vaga = await Vaga.find_one({"_id": id})
-
     if not vaga:
         raise HTTPException(
             status_code=404
@@ -120,6 +112,7 @@ async def update(id: str, reqUpdateVaga: ReqUpdateVaga = Body(...)):
         "message": "Vaga atualizada com sucesso.",
         "data": vaga
     }
+
 
 @router.delete("/{id}", status_code=204)
 async def delete(id: str):
