@@ -1,0 +1,13 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    volumes:
+      - ./api:/api
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          memory: 700M
