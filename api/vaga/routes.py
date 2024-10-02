@@ -48,7 +48,7 @@ async def findAll(
 
     lista_final = []
 
-    if infer is not None and infer is True:
+    if infer is not None and infer is True and lista != []:
         char2idx = req.state.ml_model['char2idx']
         UNKNOWN_IDX = (len(char2idx) - 1)
         model = req.state.ml_model['model']
