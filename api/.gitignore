@@ -161,3 +161,4 @@ cython_debug/
 /ml/model.keras
 
 /ml/*.pickle
+/ml/*.json
