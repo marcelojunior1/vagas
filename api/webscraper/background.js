@@ -3,7 +3,15 @@ document.onkeydown = function(evt) {
     if (!evt.ctrlKey) {
       return;
     }
+    scrapper();
+};
+document.onmousedown = function(evt) {
+    if(evt.button === 1) {
+        scrapper();
+    }
+}
 
+function scrapper() {
     const stringsBloqueadas = ["Candidatou-se", "ex-alunos", "geralmente", "ex-aluno", "verification", "Visualizado", "Recrutando", "corresponde", "horas"]
     let lista = document.getElementsByClassName("scaffold-layout__list-container")[0].children
 
@@ -25,4 +33,4 @@ document.onkeydown = function(evt) {
             }
         }).then(r => console.log(r));
       }
-};
+}
