@@ -10,4 +10,18 @@ services:
     deploy:
       resources:
         limits:
-          memory: 700M
+          memory: 600M
+
+  web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    volumes:
+      - ./web:/web
+    ports:
+      - "3000:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 60M
+

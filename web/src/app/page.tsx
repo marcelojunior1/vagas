@@ -8,18 +8,24 @@ import {
     ListItem,
     ListItemButton,
     Checkbox,
-    ListItemText, Box, LinearProgress
+    ListItemText, Box, LinearProgress, SwipeableDrawer, ListItemIcon, AppBar, Toolbar, IconButton
 } from "@mui/material";
 
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import {VagasResDto} from "@/app/dto/VagasResDto";
 
 const url_base: string = "http://localhost:8000/api/vagas/";
 
+
 export default function Page() {
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<VagasResDto[] | []>([]);
     const [loading, setLoading] = useState(true);
+    const [drawer, setDrawer] = useState(false);
 
     useEffect(() => {
         const url = "http://127.0.0.1:8000/api/vagas?infer=True&updated=False";
@@ -27,13 +33,14 @@ export default function Page() {
             fetch(url)
             .then(response => response.json())
             .then(resultado => {
-                setData(resultado.data);
+                const data: VagasResDto[] = resultado.data;
+                setData(data);
                 setLoading(false);
             } )
         }
-    },[])
+    })
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
         const id = event.target.id;
         setData(data.map((obj) => {
             if (obj.vaga._id === id)
@@ -42,8 +49,7 @@ export default function Page() {
         }));
     };
 
-    function aplicar(event: React.ChangeEvent<HTMLInputElement>) {
-        const id: string = event.target.id;
+    function aplicar(id: string) {
         const url: string = url_base + id
         axios.put(url, {
             isApplied: false,
@@ -51,8 +57,7 @@ export default function Page() {
         }).then(() => setData(data.filter((obj) => obj.vaga._id !== id)))
     }
 
-    function deletar(event: React.ChangeEvent<HTMLInputElement>) {
-        const id: string = event.target.id;
+    function deletar(id: string) {
         const url: string = url_base + id;
         axios.delete(url, {
         }).then(() => setData(data.filter((obj) => obj.vaga._id !== id)))
@@ -83,15 +88,56 @@ export default function Page() {
 
     return (
         <div className={styles.page}>
+            <div className={styles.navbar}>
+                <Box sx={{flexGrow: 1}}>
+                    <AppBar position="static">
+                        <Toolbar>
+                            <IconButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="menu"
+                                sx={{mr: 2}}
+                                onClick={() => setDrawer(true)}
+                            >
+                                <DashboardIcon/>
+                            </IconButton>
+                        </Toolbar>
+                    </AppBar>
+                </Box>
+            </div>
             <main className={styles.main}>
+                <SwipeableDrawer
+                    role="presentation"
+                    open={drawer}
+                    onClose={() => {
+                        setDrawer(false)
+                    }}
+                    onOpen={() => {
+                    }}
+                >
+                    <List>
+                        {['Palavras bloqueadas'].map((text, index) => (
+                            <ListItem key={text} disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text}/>
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </SwipeableDrawer>
+
 
                 <Box component="section" className={styles.opcoes} sx={{p: 2}}>
                     <Button onClick={atualizaTudo} variant="contained">Atualizar tudo</Button>
                     <Button onClick={deletaTudo} variant="contained">Deletar tudo</Button>
                 </Box>
 
-                <Box hidden={!loading} sx={{ width: '100%' }}>
-                    <LinearProgress />
+                <Box hidden={!loading} sx={{width: '100%'}}>
+                    <LinearProgress/>
                 </Box>
 
                 <Container hidden={loading}>
@@ -124,8 +170,9 @@ export default function Page() {
                                             />
                                         </ListItemButton>
 
-                                        <Button id={vaga._id} onClick={aplicar} variant="outlined">Aplicar</Button>
-                                        <Button id={vaga._id} onClick={deletar} variant="outlined" color="error">Deletar</Button>
+                                        <Button onClick={() => aplicar(vaga._id)} variant="outlined">Aplicar</Button>
+                                        <Button onClick={() => deletar(vaga._id)} variant="outlined"
+                                                color="error">Deletar</Button>
                                     </ListItem>
                                 )
                             })}
