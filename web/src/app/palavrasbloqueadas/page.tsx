@@ -13,9 +13,8 @@ export default function palavrasbloqueadas() {
     const [data, setData] = useState<PalavraBloqueadaDto[] | []>([]);
 
     useEffect(() => {
-        const url = "http://127.0.0.1:8000/api/palavrasbloqueadas";
         if (data.length === 0) {
-            fetch(url)
+            fetch(url_base + '/palavrasbloqueadas')
                 .then(response => response.json())
                 .then(resultado => {
                     console.log(resultado)
@@ -32,7 +31,14 @@ export default function palavrasbloqueadas() {
                 ativado: true
             }).then(() => {
                 setPalavraNova('');
-                console.log("OK")
+
+                fetch(url_base + '/palavrasbloqueadas')
+                .then(response => response.json())
+                .then(resultado => {
+                    console.log(resultado)
+                    const data: PalavraBloqueadaDto[] = resultado.data;
+                    setData(data);
+                } )
             })
         }
     }
@@ -50,7 +56,6 @@ export default function palavrasbloqueadas() {
                             setPalavraNova(String(event.target.value).toLowerCase());
                         }}
                     />
-                    <Button onClick={null} variant="contained">Salvar</Button>
                 </Box>
             </div>
             <List sx={{width: '100%'}}>
@@ -63,7 +68,7 @@ export default function palavrasbloqueadas() {
 
                             <Checkbox
                                 id={palavra}
-                                checked={ativado} onChange={null}
+                                checked={ativado}
                                 sx={{color: "white"}}/>
 
                             <ListItemText sx={{maxWidth: 400}} id={palavra}

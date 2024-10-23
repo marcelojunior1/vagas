@@ -3,8 +3,8 @@ import styles from "@/app/page.module.css";
 import {
     Box,
     Button,
-    Checkbox,
-    Container,
+    Checkbox, Chip,
+    Container, IconButton,
     LinearProgress,
     List,
     ListItem,
@@ -14,6 +14,8 @@ import {
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {VagasResDto} from "@/app/_dto/VagasResDto";
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
 
 const url_base: string = "http://localhost:8000/api/vagas/";
 
@@ -101,7 +103,7 @@ export default function vagas() {
                                     key={vaga._id}
                                     disablePadding
                                 >
-                                    <p style={{width: 40}} className={styles.pred}> {pred} </p>
+                                    <Chip size="small" label={pred} variant="outlined" />
 
                                     <Checkbox
                                         id={vaga._id}
@@ -121,9 +123,10 @@ export default function vagas() {
                                         />
                                     </ListItemButton>
 
-                                    <Button onClick={() => aplicar(vaga._id)} variant="outlined">Aplicar</Button>
-                                    <Button onClick={() => deletar(vaga._id)} variant="outlined"
-                                            color="error">Deletar</Button>
+                                    <Button onClick={() => aplicar(vaga._id)}  variant="outlined" endIcon={<SendIcon />}>Aplicar</Button>
+                                    <IconButton onClick={() => deletar(vaga._id)} aria-label="delete">
+                                        <DeleteIcon />
+                                    </IconButton>
                                 </ListItem>
                             )
                         })}

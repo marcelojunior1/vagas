@@ -14,11 +14,15 @@
 }
 
 .main {
+  margin-top: 50px;
+  margin-bottom: 50px;
   display: grid;
   justify-items: center;
 }
 
 .papel {
   display: grid;
-  min-width: 70vw;
+  width: 100%;
+  min-width: 300px;
+  max-width: 900px;
 }
