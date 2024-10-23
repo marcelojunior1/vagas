@@ -1,4 +1,4 @@
-import {VagaDto} from "@/app/dto/VagaDto";
+import {VagaDto} from "@/app/_dto/VagaDto";
 
 export interface VagasResDto {
     pred: string,
