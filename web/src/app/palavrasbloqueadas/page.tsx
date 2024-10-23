@@ -47,7 +47,7 @@ export default function palavrasbloqueadas() {
                         label="Palavra Nova"
                         value={palavraNova}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            setPalavraNova(event.target.value);
+                            setPalavraNova(String(event.target.value).toLowerCase());
                         }}
                     />
                     <Button onClick={null} variant="contained">Salvar</Button>

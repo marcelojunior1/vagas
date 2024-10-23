@@ -13,7 +13,7 @@ class Vaga(Document):
     isApplied: bool = False
     isEnabled: bool = False
     isUpdated: bool = False
-    txtVaga: str = ""
+    txtVaga: str
     timestamp: datetime = datetime.now()
 
     def __init__(self, *args, **kwargs):

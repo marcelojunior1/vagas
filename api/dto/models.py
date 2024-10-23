@@ -13,3 +13,11 @@ class ReqUpdateVaga(BaseModel):
     isEnabled: bool = None
     isUpdated: bool = None
     txtVaga: str = None
+
+class ReqPalavraBloqueada(BaseModel):
+    palavra: str
+    ativado: bool
+
+class ResPalavraBloqueada(BaseModel):
+    palavra: str
+    ativado: bool

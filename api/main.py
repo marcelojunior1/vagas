@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.database import init_db
 from ml.ml import get_char2idx, get_model
 from vaga.routes import router as Vagas
+from palavrasbloqueadas.routes import router as PalavrasBloqueadas
 
 
 ml_model = {}
@@ -34,3 +35,4 @@ app.add_middleware(
 
 
 app.include_router(Vagas, tags=["vagas"], prefix="/api/vagas")
+app.include_router(PalavrasBloqueadas, tags=["palavrasbloqueadas"], prefix="/api/palavrasbloqueadas")

@@ -6,6 +6,8 @@ from nltk.tokenize import RegexpTokenizer
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
 
+from api.palavrasbloqueadas.model import Palavrabloqueada
+
 tokenizer = RegexpTokenizer(r'\w+')
 
 router = APIRouter()
@@ -23,8 +25,7 @@ async def findAll(
         treinamento: bool = False,
         infer: bool | None = None,
         enable: bool | None = None,
-        updated: bool | None = None,
-        max_sequence=None ):
+        updated: bool | None = None):
     if treinamento is True:
         lista_vagas = await Vaga.find(In(Vaga.isUpdated, [True])).to_list()
         qtd_pos = await Vaga.find(In(Vaga.isApplied, [True])).count()
@@ -84,6 +85,15 @@ async def create(vagaReq: ReqNovaVaga = Body(...)):
         isUpdated=vagaReq.isUpdated,
         txtVaga=vagaReq.txtVaga
     )
+    palavras_bloqueadas = await Palavrabloqueada.find_all().to_list()
+
+    for palavra_obj in palavras_bloqueadas:
+        texto = nova_vaga.txtVaga.lower()
+        if palavra_obj.palavra in texto:
+            nova_vaga.isApplied = False
+            nova_vaga.isEnabled = True
+            nova_vaga.isUpdated = True
+
     try:
         await nova_vaga.create()
     except:
