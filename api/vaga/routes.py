@@ -6,7 +6,7 @@ from nltk.tokenize import RegexpTokenizer
 from dto.models import ReqNovaVaga, ReqUpdateVaga
 from vaga.model import Vaga
 
-from api.palavrasbloqueadas.model import Palavrabloqueada
+from palavrasbloqueadas.model import Palavrabloqueada
 
 tokenizer = RegexpTokenizer(r'\w+')
 

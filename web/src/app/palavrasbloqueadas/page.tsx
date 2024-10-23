@@ -8,8 +8,8 @@ import {PalavraBloqueadaDto} from "@/app/_dto/PalavraBloqueadaDto";
 
 const url_base: string = "http://localhost:8000/api";
 
-export default function palavrasbloqueadas() {
-    const [palavraNova, setPalavraNova] = useState<String>('');
+export default function PalavrasBloqueadas() {
+    const [palavraNova, setPalavraNova] = useState<string>('');
     const [data, setData] = useState<PalavraBloqueadaDto[] | []>([]);
 
     useEffect(() => {
@@ -53,7 +53,7 @@ export default function palavrasbloqueadas() {
                         label="Palavra Nova"
                         value={palavraNova}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            setPalavraNova(String(event.target.value).toLowerCase());
+                            setPalavraNova(event.target.value.toLowerCase());
                         }}
                     />
                 </Box>

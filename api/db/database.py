@@ -3,7 +3,7 @@ import beanie
 import motor.motor_asyncio
 from vaga.model import Vaga
 
-from api.palavrasbloqueadas.model import Palavrabloqueada
+from palavrasbloqueadas.model import Palavrabloqueada
 
 uri: str = os.environ["URI"]
 

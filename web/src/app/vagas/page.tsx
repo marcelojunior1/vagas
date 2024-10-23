@@ -1,4 +1,5 @@
 "use client"
+
 import styles from "@/app/page.module.css";
 import {
     Box,
@@ -19,7 +20,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 const url_base: string = "http://localhost:8000/api/vagas/";
 
-export default function vagas() {
+export default function Vagas() {
     const [data, setData] = useState<VagasResDto[] | []>([]);
     const [loading, setLoading] = useState(true);
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, HTTPException
-from api.dto.models import ReqPalavraBloqueada
-from api.palavrasbloqueadas.model import Palavrabloqueada
+from dto.models import ReqPalavraBloqueada
+from palavrasbloqueadas.model import Palavrabloqueada
 
 router = APIRouter()
 
