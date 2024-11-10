@@ -104,7 +104,7 @@ export default function Vagas() {
                                     key={vaga._id}
                                     disablePadding
                                 >
-                                    <Chip size="small" label={pred} variant="outlined" />
+                                    <Chip sx={{minWidth: 70}} size="small" label={pred} variant="outlined" />
 
                                     <Checkbox
                                         id={vaga._id}
