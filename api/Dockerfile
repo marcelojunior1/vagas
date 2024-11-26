@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:2.16.2-gpu
+FROM tensorflow/tensorflow:2.18.0-jupyter
 COPY ./api/requirements.txt /api/requirements.txt
 WORKDIR /api
 RUN pip install -r requirements.txt

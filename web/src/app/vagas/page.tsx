@@ -4,7 +4,7 @@ import styles from "@/app/page.module.css";
 import {
     Box,
     Button,
-    Checkbox, Chip,
+    Chip,
     Container, IconButton,
     LinearProgress,
     List,
@@ -17,6 +17,7 @@ import axios from "axios";
 import {VagasResDto} from "@/app/_dto/VagasResDto";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
+import Switch from '@mui/material/Switch';
 
 const url_base: string = "http://localhost:8000/api/vagas/";
 
@@ -106,7 +107,7 @@ export default function Vagas() {
                                 >
                                     <Chip sx={{minWidth: 70}} size="small" label={pred} variant="outlined" />
 
-                                    <Checkbox
+                                    <Switch
                                         id={vaga._id}
                                         checked={vaga.isApplied} onChange={handleChange}
                                         sx={{color: "white"}}

@@ -3,6 +3,5 @@ motor~=3.5.1
 beanie~=1.26.0
 matplotlib~=3.9.2
 nltk~=3.9.1
-tensorflow[gpu]~=2.16.2
 uvicorn~=0.32.0
 pandas~=2.2.2
