@@ -17,7 +17,6 @@ import axios from "axios";
 import {VagasResDto} from "@/app/_dto/VagasResDto";
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
-import Switch from '@mui/material/Switch';
 
 const url_base: string = "http://localhost:8000/api/vagas/";
 
@@ -61,19 +60,10 @@ export default function Vagas() {
         setData([]);
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement> ) => {
-        const id = event.target.id;
-        setData(data.map((obj) => {
-            if (obj.vaga._id === id)
-                obj.vaga.isApplied = event.target.checked;
-            return obj
-        }));
-    };
-
     function aplicar(id: string) {
         const url: string = url_base + id
         axios.put(url, {
-            isApplied: false,
+            isApplied: true,
             isUpdated: true
         }).then(() => setData(data.filter((obj) => obj.vaga._id !== id)))
     }
@@ -106,12 +96,6 @@ export default function Vagas() {
                                     disablePadding
                                 >
                                     <Chip sx={{minWidth: 70}} size="small" label={pred} variant="outlined" />
-
-                                    <Switch
-                                        id={vaga._id}
-                                        checked={vaga.isApplied} onChange={handleChange}
-                                        sx={{color: "white"}}
-                                    />
 
                                     <ListItemButton sx={{gap: 2}}
                                                     role={undefined}
